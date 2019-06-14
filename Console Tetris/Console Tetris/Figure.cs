@@ -20,8 +20,10 @@ namespace Console_tetris
         public bool IsVertical { get; set; } //0-horisontal, 1 - vertical
         public int X { get; set; }
         public int Y { get; set; }
-        public int LengthVertical;
-        public int LenghtHorizontal;
+        public int LengthRowsHorisontal { get; set; }
+        public int LengthRowsVertical { get; set; }
+        public int LenghtColumnsHorizontal { get; set; }
+        public int LenghtColumnsVertical { get; set; }
 
         public virtual void Rotate(int[,] Field) { }
     }
@@ -32,19 +34,18 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 1, 1, 0, 0 },
                                       { 1, 1, 0, 0 } };
+
             CheckCellsLeftHorizontal = new int[] { 0, -1, 1, -1 };
             CheckCellsRightHorizontal = new int[] { 0, 2, 1, 2 };
             CheckCellsBottomHorizontal = new int[] { 2, 0, 2, 1 };
             CheckCellsLeftVertical = CheckCellsLeftHorizontal;
             CheckCellsRightVertical = CheckCellsRightHorizontal;
             CheckCellsBottomVertical = CheckCellsBottomHorizontal;
-            LenghtHorizontal = 2;
-            LengthVertical = 2;
-        }
 
-        public override void Rotate(int[,] Field)
-        {
-
+            LengthRowsHorisontal = 2;
+            LenghtColumnsHorizontal = 2;
+            LengthRowsVertical = 2;
+            LenghtColumnsVertical = 2;
         }
     }
 
@@ -54,11 +55,18 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 1, 1, 1, 1 },
                                       { 0, 0, 0, 0 } };
-        }
 
-        public override void Rotate(int[,] Field)
-        {
+            CheckCellsLeftHorizontal = new int[] { 0, -1 };
+            CheckCellsRightHorizontal = new int[] { 0, 4 };
+            CheckCellsBottomHorizontal = new int[] { 1, 0, 1, 1, 1, 2, 1, 3 };
+            CheckCellsLeftVertical = new int[] { 0, -1, 1, -1, 2, -1, 3, -1 };
+            CheckCellsRightVertical = new int[] { 0, 1, 1, 1, 2, 1, 3, 1 };
+            CheckCellsBottomVertical = new int[] { 4, 0 };
 
+            LengthRowsHorisontal = 1;
+            LenghtColumnsHorizontal = 4;
+            LengthRowsVertical = 4;
+            LenghtColumnsVertical = 1;
         }
     }
 
@@ -68,11 +76,18 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 0, 0, 1, 0 },
                                       { 1, 1, 1, 0 } };
-        }
 
-        public override void Rotate(int[,] Field)
-        {
+            CheckCellsLeftHorizontal = new int[] { 0, 1, 1, -1 };
+            CheckCellsRightHorizontal = new int[] { 0, 3, 1, 3 };
+            CheckCellsBottomHorizontal = new int[] { 2, 0, 2, 1, 2, 2 };
+            CheckCellsLeftVertical = new int[] { 0, -1, 1, -1, 2, -1 };
+            CheckCellsRightVertical = new int[] { 0, 1, 1, 1, 2, 2 };
+            CheckCellsBottomVertical = new int[] { 0, 3, 1, 3 };
 
+            LengthRowsHorisontal = 2;
+            LenghtColumnsHorizontal = 3;
+            LengthRowsVertical = 3;
+            LenghtColumnsVertical = 2;
         }
     }
 
@@ -82,11 +97,18 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 1, 1, 1, 0 },
                                       { 0, 0, 1, 0 } };
-        }
 
-        public override void Rotate(int[,] Field)
-        {
+            CheckCellsLeftHorizontal = new int[] { 0, -1, 1, 1 };
+            CheckCellsRightHorizontal = new int[] { 0, 3, 1, 3 };
+            CheckCellsBottomHorizontal = new int[] { 1, 0, 1, 1, 2, 2 };
+            CheckCellsLeftVertical = new int[] { 0, 0, 1, 0, 2, -1 };
+            CheckCellsRightVertical = new int[] { 0, 2, 1, 2, 2, 2 };
+            CheckCellsBottomVertical = new int[] { 0, 3, 1, 3 };
 
+            LengthRowsHorisontal = 2;
+            LenghtColumnsHorizontal = 3;
+            LengthRowsVertical = 3;
+            LenghtColumnsVertical = 2;
         }
     }
 
@@ -97,11 +119,18 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 0, 1, 1, 0 },
                                       { 1, 1, 0, 0 } };
-        }
 
-        public override void Rotate(int[,] Field)
-        {
+            CheckCellsLeftHorizontal = new int[] { 0, 0, 1, -1 };
+            CheckCellsRightHorizontal = new int[] { 0, 3, 1, 2 };
+            CheckCellsBottomHorizontal = new int[] { 2, 0, 2, 1, 1, 2 };
+            CheckCellsLeftVertical = new int[] { 0, -1, 1, -1, 2, 0 };
+            CheckCellsRightVertical = new int[] { 0, 1, 1, 2, 2, 2 };
+            CheckCellsBottomVertical = new int[] { 0, 2, 1, 3 };
 
+            LengthRowsHorisontal = 2;
+            LenghtColumnsHorizontal = 3;
+            LengthRowsVertical = 3;
+            LenghtColumnsVertical = 2;
         }
     }
 
@@ -111,11 +140,18 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 1, 1, 0, 0 },
                                       { 0, 1, 1, 0 } };
-        }
 
-        public override void Rotate(int[,] Field)
-        {
+            CheckCellsLeftHorizontal = new int[] { 0, -1, 1, 0 };
+            CheckCellsRightHorizontal = new int[] { 0, 2, 1, 3 };
+            CheckCellsBottomHorizontal = new int[] { 1, 0, 2, 1, 2, 2 };
+            CheckCellsLeftVertical = new int[] { 0, 0, 1, -1, 2, -1 };
+            CheckCellsRightVertical = new int[] { 0, 2, 1, 2, 2, 1 };
+            CheckCellsBottomVertical = new int[] { 0, 3, 1, 2 };
 
+            LengthRowsHorisontal = 2;
+            LenghtColumnsHorizontal = 3;
+            LengthRowsVertical = 3;
+            LenghtColumnsVertical = 2;
         }
     }
 
@@ -125,11 +161,17 @@ namespace Console_tetris
         {
             Geometry = new int[2, 4] {{ 1, 1, 1, 0 },
                                       { 0, 1, 0, 0 } };
-        }
+            CheckCellsLeftHorizontal = new int[] { 0, -1, 1, 0 };
+            CheckCellsRightHorizontal = new int[] { 0, 3, 1, 2 };
+            CheckCellsBottomHorizontal = new int[] { 1, 0, 2, 1, 1, 2 };
+            CheckCellsLeftVertical = new int[] { 0, 0, 1, -1, 2, 0 };
+            CheckCellsRightVertical = new int[] { 0, 2, 1, 2, 2, 2 };
+            CheckCellsBottomVertical = new int[] { 0, 2, 1, 3 };
 
-        public override void Rotate(int[,] Field)
-        {
-
+            LengthRowsHorisontal = 2;
+            LenghtColumnsHorizontal = 3;
+            LengthRowsVertical = 3;
+            LenghtColumnsVertical = 2;
         }
     }
 }
