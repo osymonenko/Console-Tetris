@@ -11,24 +11,48 @@ namespace Console_tetris
     {
         public int[,] Field = new int[22, 10];
         public Figure Fig = new O();
-        public int boomNum;
+        //public Figure Fig;
+        public static int boomNum;
+        public int highScore = 999;
+        public string highScorePlayer = "TestHighScorePlayer";
+        public string playerName = "TestPlayerName";
+        public int score;
+        public int lines;
 
         public void SetFigStart()
         {
-            Fig.IsVertical = false;
+            //Fig = Generate();
+            Fig.IsVertical = true;
             Fig.Y = 0;
             Fig.X = Field.GetLength(1) / 2 - 1;
         }
 
         public void DrawFig(Figure figure)
         {
-            for (int yc = 0; yc < Fig.Geometry.GetLength(0); yc++)
+            if (!Fig.IsVertical)
             {
-                for (int xc = 0; xc < Fig.Geometry.GetLength(1); xc++)
+                for (int figRows = 0; figRows < Fig.Geometry.GetLength(0); figRows++)
                 {
-                    Field[Fig.Y + yc, Fig.X + xc] = Fig.Geometry[yc, xc];
+                    for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
+                    {
+                        Field[Fig.Y + figRows, Fig.X + figColumns] = Fig.Geometry[figRows, figColumns];
+                    }
                 }
             }
+            else
+            {
+                /*vynos mozga*/
+                for (int figRows = 0; figRows < Fig.Geometry.GetLength(0); figRows++)
+                {
+                    for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
+                    {
+                        Field[Fig.Y + figColumns, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
+                        UpdateField();
+                        Thread.Sleep(10);
+                    }
+                }
+            }
+            UpdateField();
         }
 
         public void UpdateField()
@@ -39,12 +63,42 @@ namespace Console_tetris
                 for (int xc = 0; xc < Field.GetLength(1); xc++)
                 {
                     Console.Write(Field[yc, xc]);
+
+                    /*highscore print (1 from 2)*/
+                    if (yc == 1 && xc == Field.GetLength(1) - 1)
+                    {
+                        Console.Write("\t\t HIGHSCORE:");
+                    }
+                    /*highscore print (2 from 2)*/
+                    if (yc == 2 && xc == Field.GetLength(1) - 1)
+                    {
+                        Console.Write("\t -= " + highScorePlayer + " with " + highScore + " points =-");
+                    }
+                    /*playerinfo print (1 from 4)*/
+                    if (yc == 4 && xc == Field.GetLength(1) - 1)
+                    {
+                        Console.Write("\t    CURRENT PLAYER: ");
+                    }
+                    /*playerinfo print (2 from 4)*/
+                    if (yc == 5 && xc == Field.GetLength(1) - 1)
+                    {
+                        Console.Write("\t    name: " + playerName);
+                    }
+                    /*playerinfo print (3 from 4)*/
+                    if (yc == 6 && xc == Field.GetLength(1) - 1)
+                    {
+                        Console.Write("\t   lines: " + lines);
+                    }
+                    /*playerinfo print (4 from 4)*/
+                    if (yc == 7 && xc == Field.GetLength(1) - 1)
+                    {
+                        Console.Write("\t   score: " + score);
+                    }
                 }
                 Console.WriteLine();
             }
         }
 
-        //fixed
         public void MoveFigDown(bool NoObstructions)
         {
             if (NoObstructions)
@@ -75,6 +129,20 @@ namespace Console_tetris
                             }
                         }
                     }
+                }
+                if (Fig.IsVertical)
+                {
+                    for (int figRows = 0; figRows < Fig.Geometry.GetLength(0); figRows++)
+                    {
+                        for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
+                        {
+                            Field[Fig.Y + figColumns + 1, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
+                            UpdateField();
+                            Thread.Sleep(10);
+                        }
+                    }
+                    Field[Fig.Y, Fig.X] = 0;
+                    Field[Fig.Y, Fig.X + 1] = 0;
                 }
                 Fig.Y++;
                 UpdateField();
@@ -113,14 +181,34 @@ namespace Console_tetris
                         //destroying the rows
                         for (int column = 0; column < Field.GetLength(1); column++)
                         {
-                            Console.WriteLine("MAKING CELL " + Field[rowsToDestroy[rowNum], column] + "= 0");
-                            Thread.Sleep(100);
+                            //Console.WriteLine("MAKING CELL " + Field[rowsToDestroy[rowNum], column] + "= 0");
+                            //Thread.Sleep(100);
                             Field[rowsToDestroy[rowNum], column] = 0;
                         }
-                        UpdateField();
-                        Console.WriteLine("\nBOOM! #" + ++boomNum);
-                        Thread.Sleep(1000);
+                        lines++;
+                        boomNum++;
                     }
+                }
+                /*score adding*/
+                {
+                    if (boomNum == 1)
+                    {
+                        score += 100;
+                    }
+                    if (boomNum == 2)
+                    {
+                        score += 300;
+                    }
+                    if (boomNum == 3)
+                    {
+                        score += 700;
+                    }
+                    if (boomNum == 4)
+                    {
+                        score += 1500;
+                    }
+                    boomNum = 0;
+                    UpdateField();
                 }
                 //moving rows
                 for (int rowNum = 0; rowNum < rowsToDestroy.GetLength(0); rowNum++)
@@ -149,7 +237,7 @@ namespace Console_tetris
             }
         }
 
-        //fixing.................................................................
+
         public void MoveFigLeft(bool NoObstructions)
         {
             if (NoObstructions)
@@ -208,21 +296,27 @@ namespace Console_tetris
 
         public bool NoObstructionsCheck(char KeyPressed)
         {
-            int counter = 2;
+            int cellCheckedCounter = 2;
+            int correctorForI = 0;
+            if (Fig.ToString() == "Console_tetris.I")
+            {
+                correctorForI = 1;
+            }
             switch (KeyPressed)
             {
                 case 'A':
                     {
-                        //fixed for O object
+                        /*if figure is located not on the leftmost point*/
                         if (Fig.X != 0)
                         {
-                            if (!Fig.IsVertical && Fig.X != 0)
+                            /*if figure is horizontal*/
+                            if (!Fig.IsVertical)
                             {
-                                for (int index = 0; index < Fig.CheckCellsLeftHorizontal.GetLength(0);)
+                                for (int index = 0; index < Fig.CheckCellsLeftHorizontal.GetLength(0); index = index + 2)
                                 {
                                     if (Field[Fig.Y + Fig.CheckCellsLeftHorizontal[index], Fig.X + Fig.CheckCellsLeftHorizontal[index + 1]] != 1)
                                     {
-                                        Field[Fig.Y + Fig.CheckCellsLeftHorizontal[index], Fig.X + Fig.CheckCellsLeftHorizontal[index + 1]] = 2;
+                                        Field[Fig.Y + Fig.CheckCellsLeftHorizontal[index], Fig.X + Fig.CheckCellsLeftHorizontal[index + 1]] = cellCheckedCounter++;
                                     }
                                     UpdateField();
                                     Thread.Sleep(10);
@@ -230,11 +324,11 @@ namespace Console_tetris
                                     {
                                         return false;
                                     }
-                                    index = index + 2;
                                 }
                                 return true;
                             }
-                            if (Fig.IsVertical && Fig.X != 0)
+                            /*if figure is horizontal*/
+                            if (Fig.IsVertical)
                             {
 
                             }
@@ -246,13 +340,13 @@ namespace Console_tetris
                         //fixed for O object
                         if (Fig.X != Field.GetLength(1) - 1)
                         {
-                            if (!Fig.IsVertical && Fig.X != Field.GetLength(1) - Fig.LenghtHorizontal)
+                            if (!Fig.IsVertical && Fig.X != Field.GetLength(1) - Fig.LenghtColumnsHorizontal)
                             {
-                                for (int index = 0; index < Fig.CheckCellsRightHorizontal.GetLength(0);)
+                                for (int index = 0; index < Fig.CheckCellsRightHorizontal.GetLength(0); index = index + 2)
                                 {
                                     if (Field[Fig.Y + Fig.CheckCellsRightHorizontal[index], Fig.X + Fig.CheckCellsRightHorizontal[index + 1]] != 1)
                                     {
-                                        Field[Fig.Y + Fig.CheckCellsRightHorizontal[index], Fig.X + Fig.CheckCellsRightHorizontal[index + 1]] = counter++;
+                                        Field[Fig.Y + Fig.CheckCellsRightHorizontal[index], Fig.X + Fig.CheckCellsRightHorizontal[index + 1]] = cellCheckedCounter++;
                                     }
                                     UpdateField();
                                     Thread.Sleep(10);
@@ -260,7 +354,6 @@ namespace Console_tetris
                                     {
                                         return false;
                                     }
-                                    index = index + 2;
                                 }
                                 return true;
                             }
@@ -273,33 +366,48 @@ namespace Console_tetris
                     }
                 case 'S':
                     {
-                        //fixed for O object
-                        if (!Fig.IsVertical && Fig.Y != Field.GetLength(0) - Fig.LengthVertical)
+                        /*if figure is horizontal AND != on the end of the rows*/
+                        if (!Fig.IsVertical && Fig.Y != Field.GetLength(0) - Fig.LengthRowsHorisontal)
                         {
-                            for (int index = 0; index < Fig.CheckCellsLeftHorizontal.GetLength(0);)
+                            /*checking every cell of CheckCellsBottomHorizontal, index point at column and row coordinate*/
+                            for (int index = 0; index < Fig.CheckCellsBottomHorizontal.GetLength(0); index = index + 2)
                             {
+                                /*next code for checking visualization only*/
                                 if (Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] != 1)
                                 {
-                                    Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] = counter++;
+                                    Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] = cellCheckedCounter++;
                                 }
                                 UpdateField();
                                 Thread.Sleep(10);
+                                /*if obstruction found - returns false*/
                                 if (Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] == 1)
                                 {
                                     return false;
                                 }
-                                index = index + 2;
                             }
                             return true;
                         }
-                        if (Fig.IsVertical && Fig.Y != Field.GetLength(0) - 1)
+                        /*for vertical figures*/
+                        if (Fig.IsVertical && Fig.Y != Field.GetLength(0) - Fig.LengthRowsVertical)
                         {
-
+                            /*checking every cell of CheckCellsBottomHorizontal, index point at column and row coordinate*/
+                            for (int index = 0; index < Fig.CheckCellsBottomVertical.GetLength(0); index = index + 2)
+                            {
+                                /*next code for checking visualization only*/
+                                if (Field[Fig.Y + Fig.CheckCellsBottomVertical[index], Fig.X + correctorForI + Fig.CheckCellsBottomVertical[index + 1]] != 1)
+                                {
+                                    Field[Fig.Y + Fig.CheckCellsBottomVertical[index], Fig.X + correctorForI + Fig.CheckCellsBottomVertical[index + 1]] = cellCheckedCounter++;
+                                }
+                                UpdateField();
+                                Thread.Sleep(10);
+                                /*if obstruction found - returns false*/
+                                if (Field[Fig.Y + Fig.CheckCellsBottomVertical[index], Fig.X + correctorForI + Fig.CheckCellsBottomVertical[index + 1]] == 1)
+                                {
+                                    return false;
+                                }
+                            }
+                            return true;
                         }
-                        return false;
-                    }
-                case 'R':
-                    {
                         return false;
                     }
                 default:
@@ -310,45 +418,39 @@ namespace Console_tetris
             }
         }
 
-        public void RotateFig()
+        /*use it later*/
+
+        Figure Generate()
         {
-            //Fig.Rotate(Field);
+           Figure fig;
+           Random num = new Random();
+           int x = num.Next(7);
+           switch (x)
+           {
+               case 1: 
+                   fig = new I();
+                   break;
+               case 2:
+                   fig = new L();
+                   break;
+               case 3:
+                   fig = new J();
+                   break;
+               case 4:
+                   fig = new O();
+                   break;
+               case 5:
+                   fig = new S();
+                   break;
+               case 6:
+                   fig = new Z();
+                   break;
+               default:
+                   fig = new T();
+                   break;
+           }
+           return fig;
         }
-
-
-        /*use it later
-* 
-Figure Generate()
-{
-   Figure fig;
-   Random num = new Random();
-   int x = num.Next(7);
-   switch (x)
-   {
-       case 1: 
-           fig = new I();
-           break;
-       case 2:
-           fig = new L();
-           break;
-       case 3:
-           fig = new J();
-           break;
-       case 4:
-           fig = new O();
-           break;
-       case 5:
-           fig = new S();
-           break;
-       case 6:
-           fig = new Z();
-           break;
-       default:
-           fig = new T();
-           break;
-   }
-   return fig;
-}*/
 
     }
 }

@@ -74,13 +74,6 @@ namespace Console_tetris
                                 Game.MoveFigDown(Game.NoObstructionsCheck('S'));
                                 break;
                             }
-                        case ConsoleKey.R:
-                            lock (locker)
-                            {
-                                Game.RotateFig();
-                                break;
-                            }
-
                         default:
                             Console.WriteLine("...NOTHING...");
                             break;
