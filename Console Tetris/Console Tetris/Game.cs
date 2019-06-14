@@ -27,7 +27,7 @@ namespace Console_tetris
             Fig.X = Field.GetLength(1) / 2 - 1;
         }
 
-        public void DrawFig(Figure figure)
+        public void DrawFig()
         {
             if (!Fig.IsVertical)
             {
@@ -151,7 +151,7 @@ namespace Console_tetris
             {
                 CheckFullLines();
                 SetFigStart();
-                DrawFig(Fig);
+                DrawFig();
             }
         }
 

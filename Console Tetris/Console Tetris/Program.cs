@@ -12,15 +12,17 @@ namespace Console_tetris
     class Program
     {
         static Game Game = new Game();
-        static Figure Fig = new O();
         static object locker = new object();
         //for better view
 
         static void Main(string[] args)
         {
+            /*Game preparation*/
+            Console.WriteLine("Player, enter your name below");
+            Game.playerName = Console.ReadLine();
+
             Game.SetFigStart();
-            //Game.DrawFig(Fig);
-            Game.UpdateField();
+            Game.DrawFig();
             Thread T1 = new Thread(SleepMoveDown);
             Thread T2 = new Thread(UpdateGameField);
             T1.Name = "THREAD: Drop every 1 sec";
@@ -33,7 +35,7 @@ namespace Console_tetris
         {
             while (true)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(100);
                 lock (locker)
                 {
                     Game.MoveFigDown(Game.NoObstructionsCheck('S'));
