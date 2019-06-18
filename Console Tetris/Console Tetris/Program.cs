@@ -23,27 +23,27 @@ namespace Console_tetris
 
             Game.SetFigStart();
             Game.DrawFig();
-            Thread T1 = new Thread(SleepMoveDown);
+            //Thread T1 = new Thread(SleepMoveDown);
             Thread T2 = new Thread(UpdateGameField);
-            T1.Name = "THREAD: Drop every 1 sec";
+            //T1.Name = "THREAD: Drop every 1 sec";
             T2.Name = "THREAD: Readkey";
-            T1.Start();
+            //T1.Start();
             T2.Start();
         }
 
-        public static void SleepMoveDown()
-        {
-            while (true)
-            {
-                Thread.Sleep(100);
-                lock (locker)
-                {
-                    Game.MoveFigDown(Game.NoObstructionsCheck('S'));
-                    DateTime now = DateTime.Now;
-                    Console.WriteLine("\n{0:T}", now);
-                }
-            }
-        }
+        //public static void SleepMoveDown()
+        //{
+        //    while (true)
+        //    {
+        //        Thread.Sleep(100);
+        //        lock (locker)
+        //        {
+        //            Game.MoveFigDown(Game.NoObstructionsCheck('S'));
+        //            DateTime now = DateTime.Now;
+        //            Console.WriteLine("\n{0:T}", now);
+        //        }
+        //    }
+        //}
 
         public static void UpdateGameField()
         {

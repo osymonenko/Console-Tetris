@@ -22,8 +22,8 @@ namespace Console_tetris
         public int Y { get; set; }
         public int LengthRowsHorisontal { get; set; }
         public int LengthRowsVertical { get; set; }
-        public int LenghtColumnsHorizontal { get; set; }
-        public int LenghtColumnsVertical { get; set; }
+        public int LengthColumnsHorizontal { get; set; }
+        public int LengthColumnsVertical { get; set; }
 
         public virtual void Rotate(int[,] Field) { }
     }
@@ -32,8 +32,8 @@ namespace Console_tetris
     {
         public O()
         {
-            Geometry = new int[2, 4] {{ 1, 1, 0, 0 },
-                                      { 1, 1, 0, 0 } };
+            Geometry = new int[2, 4] {{ 8, 8, 0, 0 },
+                                      { 8, 8, 0, 0 } };
 
             CheckCellsLeftHorizontal = new int[] { 0, -1, 1, -1 };
             CheckCellsRightHorizontal = new int[] { 0, 2, 1, 2 };
@@ -43,9 +43,9 @@ namespace Console_tetris
             CheckCellsBottomVertical = CheckCellsBottomHorizontal;
 
             LengthRowsHorisontal = 2;
-            LenghtColumnsHorizontal = 2;
+            LengthColumnsHorizontal = 2;
             LengthRowsVertical = 2;
-            LenghtColumnsVertical = 2;
+            LengthColumnsVertical = 2;
         }
     }
 
@@ -53,7 +53,7 @@ namespace Console_tetris
     {
         public I()
         {
-            Geometry = new int[2, 4] {{ 1, 1, 1, 1 },
+            Geometry = new int[2, 4] {{ 8, 8, 8, 8 },
                                       { 0, 0, 0, 0 } };
 
             CheckCellsLeftHorizontal = new int[] { 0, -1 };
@@ -64,9 +64,9 @@ namespace Console_tetris
             CheckCellsBottomVertical = new int[] { 4, 0 };
 
             LengthRowsHorisontal = 1;
-            LenghtColumnsHorizontal = 4;
+            LengthColumnsHorizontal = 4;
             LengthRowsVertical = 4;
-            LenghtColumnsVertical = 1;
+            LengthColumnsVertical = 1;
         }
     }
 
@@ -74,20 +74,20 @@ namespace Console_tetris
     {
         public L()
         {
-            Geometry = new int[2, 4] {{ 0, 0, 1, 0 },
-                                      { 1, 1, 1, 0 } };
+            Geometry = new int[2, 4] {{ 0, 0, 8, 0 },
+                                      { 8, 8, 8, 0 } };
 
             CheckCellsLeftHorizontal = new int[] { 0, 1, 1, -1 };
             CheckCellsRightHorizontal = new int[] { 0, 3, 1, 3 };
             CheckCellsBottomHorizontal = new int[] { 2, 0, 2, 1, 2, 2 };
             CheckCellsLeftVertical = new int[] { 0, -1, 1, -1, 2, -1 };
             CheckCellsRightVertical = new int[] { 0, 1, 1, 1, 2, 2 };
-            CheckCellsBottomVertical = new int[] { 0, 3, 1, 3 };
+            CheckCellsBottomVertical = new int[] { 3, 0, 3, 1 };
 
             LengthRowsHorisontal = 2;
-            LenghtColumnsHorizontal = 3;
+            LengthColumnsHorizontal = 3;
             LengthRowsVertical = 3;
-            LenghtColumnsVertical = 2;
+            LengthColumnsVertical = 2;
         }
     }
 
@@ -95,20 +95,20 @@ namespace Console_tetris
     {
         public J()
         {
-            Geometry = new int[2, 4] {{ 1, 1, 1, 0 },
-                                      { 0, 0, 1, 0 } };
+            Geometry = new int[2, 4] {{ 8, 8, 8, 0 },
+                                      { 0, 0, 8, 0 } };
 
             CheckCellsLeftHorizontal = new int[] { 0, -1, 1, 1 };
             CheckCellsRightHorizontal = new int[] { 0, 3, 1, 3 };
             CheckCellsBottomHorizontal = new int[] { 1, 0, 1, 1, 2, 2 };
             CheckCellsLeftVertical = new int[] { 0, 0, 1, 0, 2, -1 };
             CheckCellsRightVertical = new int[] { 0, 2, 1, 2, 2, 2 };
-            CheckCellsBottomVertical = new int[] { 0, 3, 1, 3 };
+            CheckCellsBottomVertical = new int[] { 3, 0, 3, 1 };
 
             LengthRowsHorisontal = 2;
-            LenghtColumnsHorizontal = 3;
+            LengthColumnsHorizontal = 3;
             LengthRowsVertical = 3;
-            LenghtColumnsVertical = 2;
+            LengthColumnsVertical = 2;
         }
     }
 
@@ -117,8 +117,8 @@ namespace Console_tetris
     {
         public S()
         {
-            Geometry = new int[2, 4] {{ 0, 1, 1, 0 },
-                                      { 1, 1, 0, 0 } };
+            Geometry = new int[2, 4] {{ 0, 8, 8, 0 },
+                                      { 8, 8, 0, 0 } };
 
             CheckCellsLeftHorizontal = new int[] { 0, 0, 1, -1 };
             CheckCellsRightHorizontal = new int[] { 0, 3, 1, 2 };
@@ -128,9 +128,9 @@ namespace Console_tetris
             CheckCellsBottomVertical = new int[] { 0, 2, 1, 3 };
 
             LengthRowsHorisontal = 2;
-            LenghtColumnsHorizontal = 3;
+            LengthColumnsHorizontal = 3;
             LengthRowsVertical = 3;
-            LenghtColumnsVertical = 2;
+            LengthColumnsVertical = 2;
         }
     }
 
@@ -138,8 +138,8 @@ namespace Console_tetris
     {
         public Z()
         {
-            Geometry = new int[2, 4] {{ 1, 1, 0, 0 },
-                                      { 0, 1, 1, 0 } };
+            Geometry = new int[2, 4] {{ 8, 8, 0, 0 },
+                                      { 0, 8, 8, 0 } };
 
             CheckCellsLeftHorizontal = new int[] { 0, -1, 1, 0 };
             CheckCellsRightHorizontal = new int[] { 0, 2, 1, 3 };
@@ -149,9 +149,9 @@ namespace Console_tetris
             CheckCellsBottomVertical = new int[] { 0, 3, 1, 2 };
 
             LengthRowsHorisontal = 2;
-            LenghtColumnsHorizontal = 3;
+            LengthColumnsHorizontal = 3;
             LengthRowsVertical = 3;
-            LenghtColumnsVertical = 2;
+            LengthColumnsVertical = 2;
         }
     }
 
@@ -159,8 +159,8 @@ namespace Console_tetris
     {
         public T()
         {
-            Geometry = new int[2, 4] {{ 1, 1, 1, 0 },
-                                      { 0, 1, 0, 0 } };
+            Geometry = new int[2, 4] {{ 8, 8, 8, 0 },
+                                      { 0, 8, 0, 0 } };
             CheckCellsLeftHorizontal = new int[] { 0, -1, 1, 0 };
             CheckCellsRightHorizontal = new int[] { 0, 3, 1, 2 };
             CheckCellsBottomHorizontal = new int[] { 1, 0, 2, 1, 1, 2 };
@@ -169,9 +169,9 @@ namespace Console_tetris
             CheckCellsBottomVertical = new int[] { 0, 2, 1, 3 };
 
             LengthRowsHorisontal = 2;
-            LenghtColumnsHorizontal = 3;
+            LengthColumnsHorizontal = 3;
             LengthRowsVertical = 3;
-            LenghtColumnsVertical = 2;
+            LengthColumnsVertical = 2;
         }
     }
 }

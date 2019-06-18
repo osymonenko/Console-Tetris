@@ -9,7 +9,7 @@ namespace Console_tetris
 {
     class Game
     {
-        public int[,] Field = new int[22, 10];
+        public int[,] Field = new int[15, 12];
         public Figure Fig = new O();
         //public Figure Fig;
         public static int boomNum;
@@ -103,55 +103,48 @@ namespace Console_tetris
         {
             if (NoObstructions)
             {
-                if (!Fig.IsVertical)
+                for (int row = Field.GetLength(0) -1; row > - 1 ; row--)
                 {
-                    for (int xc = 0; xc < Fig.Geometry.GetLength(1); xc++)
+                    for (int column = 0; column < Field.GetLength(1); column++)
                     {
-                        for (int yc = 0; yc < Fig.Geometry.GetLength(0); yc++)
+                        if (row == 0)
                         {
-                            //if geometry got "1". Also "0" checking should be inside "1", because only figure should be moved (other close geometry should stay untouchable)
-                            if (Fig.Geometry[yc, xc] == 1)
+                            Field[row, column] = 0;
+                        }
+                        else if(Field[row, column] == 8 && row != Field.GetLength(0)-1)
+                        {
+                            Field[row + 1, column] = 8;
+                            /*if end of the field on the bottom side or this is end of figure*/
+                            if (row == Field.GetLength(0) - 1 || (Field[row, column] == 8 && Field[row - 1, column] != 8))
                             {
-                                Field[Fig.Y + yc + 1, Fig.X + xc] = 1;
-                                //also if it was 0 yc...
-                                if (yc == 0)
-                                {
-                                    Field[Fig.Y + yc, Fig.X + xc] = 0;
-                                }
-                                //save from OutOfBounds exception
-                                if (yc != 0)
-                                {
-                                    if (Fig.Geometry[yc - 1, xc] == 0)
-                                    {
-                                        Field[Fig.Y + yc, Fig.X + xc] = 0;
-                                    }
-                                }
+                                Field[row, column] = 0;
                             }
                         }
                     }
-                }
-                if (Fig.IsVertical)
-                {
-                    for (int figRows = 0; figRows < Fig.Geometry.GetLength(0); figRows++)
-                    {
-                        for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
-                        {
-                            Field[Fig.Y + figColumns + 1, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
-                            UpdateField();
-                            Thread.Sleep(10);
-                        }
-                    }
-                    Field[Fig.Y, Fig.X] = 0;
-                    Field[Fig.Y, Fig.X + 1] = 0;
                 }
                 Fig.Y++;
                 UpdateField();
             }
             else
             {
+                ConvertFigure();
                 CheckFullLines();
                 SetFigStart();
                 DrawFig();
+            }
+        }
+
+        public void ConvertFigure()
+        {
+            for (int i = 0; i < Field.GetLength(0); i++)
+            {
+                for (int j = 0; j < Field.GetLength(1); j++)
+                {
+                    if (Field[i, j] == 8)
+                    {
+                        Field[i, j] = 1;
+                    }
+                }
             }
         }
 
@@ -242,21 +235,17 @@ namespace Console_tetris
         {
             if (NoObstructions)
             {
-                if (!Fig.IsVertical)
+                for (int row = 0; row < Field.GetLength(0); row++)
                 {
-                    for (int xc = 0; xc < Fig.Geometry.GetLength(1); xc++)
+                    for (int column = 0; column < Field.GetLength(1); column++)
                     {
-                        for (int yc = 0; yc < Fig.Geometry.GetLength(0); yc++)
+                        if (Field[row, column] == 8)
                         {
-                            //if geometry got "1"
-                            if (Fig.Geometry[yc, xc] == 1)
+                            Field[row, column - 1] = 8;
+                            /*if end of the field on the right side or this is end of figure*/
+                            if (column == Field.GetLength(1) - 1 || (Field[row,column] == 8 && Field[row,column + 1] != 8))
                             {
-                                Field[Fig.Y + yc, Fig.X + xc - 1] = 1;
-                                //also if it was 0 yc... TO NOT AFFECT ON OTHER EMPTY field zeros
-                                if (xc == Fig.Geometry.GetLength(1) - 1 | (xc < Fig.Geometry.GetLength(1) - 1 && Fig.Geometry[yc, xc + 1] == 0))
-                                {
-                                    Field[Fig.Y + yc, Fig.X + xc] = 0;
-                                }
+                                Field[row, column] = 0;
                             }
                         }
                     }
@@ -270,22 +259,18 @@ namespace Console_tetris
         {
             if (NoObstructions)
             {
-                if (!Fig.IsVertical)
+                for (int row = 0; row < Field.GetLength(0); row++)
                 {
-                    for (int xc = 0; xc < Fig.Geometry.GetLength(1); xc++)
+                    for (int column = Field.GetLength(1) - 1; column > -1; column--)
                     {
-                        for (int yc = 0; yc < Fig.Geometry.GetLength(0); yc++)
+                        if (Field[row, column] == 8)
                         {
-                            //if geometry got "1"
-                            if (Fig.Geometry[yc, xc] == 1)
+                            /*if end of the field on the left side or this is end of figure*/
+                            if (column == 0 || (Field[row, column] == 8 && Field[row, column - 1] != 8))
                             {
-                                Field[Fig.Y + yc, Fig.X + xc + 1] = 1;
-                                //also if it was 0 yc... TO NOT AFFECT ON OTHER EMPTY field zeros
-                                if (xc == 0 | (xc > 0 && Fig.Geometry[yc, xc - 1] == 0))
-                                {
-                                    Field[Fig.Y + yc, Fig.X + xc] = 0;
-                                }
+                                Field[row, column] = 0;
                             }
+                            Field[row, column + 1] = 8;
                         }
                     }
                 }
@@ -309,58 +294,49 @@ namespace Console_tetris
                         /*if figure is located not on the leftmost point*/
                         if (Fig.X != 0)
                         {
-                            /*if figure is horizontal*/
-                            if (!Fig.IsVertical)
+                            for(int row = 0; row < Field.GetLength(0); row++)
                             {
-                                for (int index = 0; index < Fig.CheckCellsLeftHorizontal.GetLength(0); index = index + 2)
+                                for (int column = 0; column < Field.GetLength(1); column++)
                                 {
-                                    if (Field[Fig.Y + Fig.CheckCellsLeftHorizontal[index], Fig.X + Fig.CheckCellsLeftHorizontal[index + 1]] != 1)
+                                    if (Field[row,column] == 8)
                                     {
-                                        Field[Fig.Y + Fig.CheckCellsLeftHorizontal[index], Fig.X + Fig.CheckCellsLeftHorizontal[index + 1]] = cellCheckedCounter++;
-                                    }
-                                    UpdateField();
-                                    Thread.Sleep(10);
-                                    if (Field[Fig.Y + Fig.CheckCellsLeftHorizontal[index], Fig.X + Fig.CheckCellsLeftHorizontal[index + 1]] == 1)
-                                    {
-                                        return false;
+                                        //save from OutOfBounds exception
+                                        if (column == 0)
+                                        {
+                                            return false;
+                                        }
+                                        if (Field[row, column - 1] == 1)
+                                        {
+                                            return false;
+                                        }
                                     }
                                 }
-                                return true;
                             }
-                            /*if figure is horizontal*/
-                            if (Fig.IsVertical)
-                            {
-
-                            }
+                            return true;
                         }
                         return false;
                     }
                 case 'D':
                     {
-                        //fixed for O object
-                        if (Fig.X != Field.GetLength(1) - 1)
+                        if ((!Fig.IsVertical &&
+                            (Fig.X + Fig.LengthColumnsHorizontal != Field.GetLength(1))) || 
+                             (Fig.IsVertical &&
+                            (Fig.X + Fig.LengthColumnsVertical != Field.GetLength(1))))
                         {
-                            if (!Fig.IsVertical && Fig.X != Field.GetLength(1) - Fig.LenghtColumnsHorizontal)
+                            for (int row = 0; row < Field.GetLength(0); row++)
                             {
-                                for (int index = 0; index < Fig.CheckCellsRightHorizontal.GetLength(0); index = index + 2)
+                                for (int column = 0; column < Field.GetLength(1); column++)
                                 {
-                                    if (Field[Fig.Y + Fig.CheckCellsRightHorizontal[index], Fig.X + Fig.CheckCellsRightHorizontal[index + 1]] != 1)
+                                    if (Field[row, column] == 8)
                                     {
-                                        Field[Fig.Y + Fig.CheckCellsRightHorizontal[index], Fig.X + Fig.CheckCellsRightHorizontal[index + 1]] = cellCheckedCounter++;
-                                    }
-                                    UpdateField();
-                                    Thread.Sleep(10);
-                                    if (Field[Fig.Y + Fig.CheckCellsRightHorizontal[index], Fig.X + Fig.CheckCellsRightHorizontal[index + 1]] == 1)
-                                    {
-                                        return false;
+                                        if (Field[row, column + 1] == 1)
+                                        {
+                                            return false;
+                                        }
                                     }
                                 }
-                                return true;
                             }
-                            if (Fig.IsVertical && Fig.X != 0)
-                            {
-
-                            }
+                            return true;
                         }
                         return false;
                     }
@@ -377,7 +353,7 @@ namespace Console_tetris
                                 {
                                     Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] = cellCheckedCounter++;
                                 }
-                                UpdateField();
+                                //UpdateField();
                                 Thread.Sleep(10);
                                 /*if obstruction found - returns false*/
                                 if (Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] == 1)
