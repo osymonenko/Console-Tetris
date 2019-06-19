@@ -10,7 +10,7 @@ namespace Console_tetris
     class Game
     {
         public int[,] Field = new int[15, 12];
-        public Figure Fig = new O();
+        public Figure Fig = new Z();
         //public Figure Fig;
         public static int boomNum;
         public int highScore = 999;
@@ -22,7 +22,6 @@ namespace Console_tetris
         public void SetFigStart()
         {
             //Fig = Generate();
-            Fig.IsVertical = true;
             Fig.Y = 0;
             Fig.X = Field.GetLength(1) / 2 - 1;
         }
@@ -103,15 +102,16 @@ namespace Console_tetris
         {
             if (NoObstructions)
             {
-                for (int row = Field.GetLength(0) -1; row > - 1 ; row--)
+                for (int column = 0; column < Field.GetLength(1); column++)
                 {
-                    for (int column = 0; column < Field.GetLength(1); column++)
+                    for (int row = Field.GetLength(0) - 1; row > -1; row--)
                     {
-                        if (row == 0)
+                        if (row == 0 && Field[row,column] == 8)
                         {
                             Field[row, column] = 0;
+                            Field[row + 1, column] = 8;
                         }
-                        else if(Field[row, column] == 8 && row != Field.GetLength(0)-1)
+                        else if(Field[row, column] == 8 && row != Field.GetLength(0)-1 && row != 0)
                         {
                             Field[row + 1, column] = 8;
                             /*if end of the field on the bottom side or this is end of figure*/
@@ -281,12 +281,6 @@ namespace Console_tetris
 
         public bool NoObstructionsCheck(char KeyPressed)
         {
-            int cellCheckedCounter = 2;
-            int correctorForI = 0;
-            if (Fig.ToString() == "Console_tetris.I")
-            {
-                correctorForI = 1;
-            }
             switch (KeyPressed)
             {
                 case 'A':
@@ -342,44 +336,22 @@ namespace Console_tetris
                     }
                 case 'S':
                     {
-                        /*if figure is horizontal AND != on the end of the rows*/
-                        if (!Fig.IsVertical && Fig.Y != Field.GetLength(0) - Fig.LengthRowsHorisontal)
+                        if ((!Fig.IsVertical &&
+                        (Fig.Y + Fig.LengthRowsHorisontal != Field.GetLength(0))) ||
+                         (Fig.IsVertical &&
+                        (Fig.Y + Fig.LengthRowsVertical != Field.GetLength(0))))
                         {
-                            /*checking every cell of CheckCellsBottomHorizontal, index point at column and row coordinate*/
-                            for (int index = 0; index < Fig.CheckCellsBottomHorizontal.GetLength(0); index = index + 2)
+                            for (int row = 0; row < Field.GetLength(0); row++)
                             {
-                                /*next code for checking visualization only*/
-                                if (Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] != 1)
+                                for (int column = 0; column < Field.GetLength(1); column++)
                                 {
-                                    Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] = cellCheckedCounter++;
-                                }
-                                //UpdateField();
-                                Thread.Sleep(10);
-                                /*if obstruction found - returns false*/
-                                if (Field[Fig.Y + Fig.CheckCellsBottomHorizontal[index], Fig.X + Fig.CheckCellsBottomHorizontal[index + 1]] == 1)
-                                {
-                                    return false;
-                                }
-                            }
-                            return true;
-                        }
-                        /*for vertical figures*/
-                        if (Fig.IsVertical && Fig.Y != Field.GetLength(0) - Fig.LengthRowsVertical)
-                        {
-                            /*checking every cell of CheckCellsBottomHorizontal, index point at column and row coordinate*/
-                            for (int index = 0; index < Fig.CheckCellsBottomVertical.GetLength(0); index = index + 2)
-                            {
-                                /*next code for checking visualization only*/
-                                if (Field[Fig.Y + Fig.CheckCellsBottomVertical[index], Fig.X + correctorForI + Fig.CheckCellsBottomVertical[index + 1]] != 1)
-                                {
-                                    Field[Fig.Y + Fig.CheckCellsBottomVertical[index], Fig.X + correctorForI + Fig.CheckCellsBottomVertical[index + 1]] = cellCheckedCounter++;
-                                }
-                                UpdateField();
-                                Thread.Sleep(10);
-                                /*if obstruction found - returns false*/
-                                if (Field[Fig.Y + Fig.CheckCellsBottomVertical[index], Fig.X + correctorForI + Fig.CheckCellsBottomVertical[index + 1]] == 1)
-                                {
-                                    return false;
+                                    if (Field[row, column] == 8)
+                                    {
+                                        if (Field[row + 1, column] == 1)
+                                        {
+                                            return false;
+                                        }
+                                    }
                                 }
                             }
                             return true;
@@ -388,43 +360,70 @@ namespace Console_tetris
                     }
                 default:
                     {
-                        Console.WriteLine("just moving down");
                         return false;
                     }
             }
         }
 
-        /*use it later*/
-
         Figure Generate()
         {
            Figure fig;
            Random num = new Random();
-           int x = num.Next(7);
+           int x = num.Next(14);
            switch (x)
            {
-               case 1: 
-                   fig = new I();
-                   break;
-               case 2:
-                   fig = new L();
-                   break;
-               case 3:
-                   fig = new J();
-                   break;
-               case 4:
-                   fig = new O();
-                   break;
-               case 5:
-                   fig = new S();
-                   break;
-               case 6:
-                   fig = new Z();
-                   break;
-               default:
-                   fig = new T();
-                   break;
-           }
+                case 1: 
+                    fig = new I();
+                    break;
+                case 2:
+                    fig = new L();
+                    break;
+                case 3:
+                    fig = new J();
+                    break;
+                case 4:
+                    fig = new O();
+                    break;
+                case 5:
+                    fig = new S();
+                    break;
+                case 6:
+                    fig = new Z();
+                    break;
+                case 7:
+                    fig = new T();
+                    break;
+                case 8:
+                    fig = new I();
+                    fig.IsVertical = true;
+                    break;
+                case 9:
+                    fig = new L();
+                    fig.IsVertical = true;
+                    break;
+                case 10:
+                    fig = new J();
+                    fig.IsVertical = true;
+                    break;
+                case 11:
+                    fig = new O();
+                    fig.IsVertical = true;
+                    break;
+                case 12:
+                    fig = new S();
+                    fig.IsVertical = true;
+                    break;
+                case 13:
+                    fig = new Z();
+                    fig.IsVertical = true;
+                    break;
+                case 14:
+                    fig = new T();
+                    fig.IsVertical = true;
+                    break;
+                default:
+                    return Generate();
+            }
            return fig;
         }
 
