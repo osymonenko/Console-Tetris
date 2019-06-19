@@ -10,14 +10,15 @@ namespace Console_tetris
     class Game
     {
         public int[,] Field = new int[15, 12];
-        public Figure Fig = new Z();
+        public Figure Fig = new O();
         //public Figure Fig;
         public static int boomNum;
-        public int highScore = 999;
+        public int highScore = 99;
         public string highScorePlayer = "TestHighScorePlayer";
         public string playerName;
         public int score;
         public int lines;
+        public bool gameOver;
 
         public void SetFigStart()
         {
@@ -34,6 +35,10 @@ namespace Console_tetris
                 {
                     for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
                     {
+                        if (Field[Fig.Y + figRows, Fig.X + figColumns] == 1)
+                        {
+                            gameOver = true;
+                        }
                         Field[Fig.Y + figRows, Fig.X + figColumns] = Fig.Geometry[figRows, figColumns];
                     }
                 }
@@ -45,11 +50,20 @@ namespace Console_tetris
                 {
                     for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
                     {
+                        if (Field[Fig.Y + figColumns, Fig.X + 1 - figRows] == 1)
+                        {
+                            gameOver = true;
+                        }
                         Field[Fig.Y + figColumns, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
                     }
                 }
             }
             UpdateField();
+        }
+
+        public void ShowScore()
+        {
+
         }
 
         public void UpdateField()
@@ -60,36 +74,72 @@ namespace Console_tetris
                 for (int xc = 0; xc < Field.GetLength(1); xc++)
                 {
                     Console.Write(Field[yc, xc]);
+                    if (!gameOver)
+                    {
+                        if (yc == 1 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\tHIGHSCORE:");
+                        }
+                        if (yc == 2 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t" + highScorePlayer + " with " + highScore + " points");
+                        }
+                        if (yc == 4 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\tPLAYER ");
+                        }
+                        if (yc == 5 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t  name: " + playerName);
+                        }
+                        if (yc == 6 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t lines: " + lines);
+                        }
+                        if (yc == 7 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t score: " + score);
+                        }
+                    }
 
-                    /*highscore print (1 from 2)*/
-                    if (yc == 1 && xc == Field.GetLength(1) - 1)
+                    if (gameOver && score <= highScore)
                     {
-                        Console.Write("\t\t HIGHSCORE:");
+                        if (yc == 1 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\tHIGHSCORE:");
+                        }
+                        if (yc == 2 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t" + highScorePlayer + " with " + highScore + " points");
+                        }
+                        if (yc == 4 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t" + playerName + " PLAYER SCORE: ");
+                        }
+                        if (yc == 5 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t" + score + " points");
+                        }
+                        if (yc == 7 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t    NOT BAD... ;)");
+                        }
                     }
-                    /*highscore print (2 from 2)*/
-                    if (yc == 2 && xc == Field.GetLength(1) - 1)
+
+                    if (gameOver && score > highScore)
                     {
-                        Console.Write("\t -= " + highScorePlayer + " with " + highScore + " points =-");
-                    }
-                    /*playerinfo print (1 from 4)*/
-                    if (yc == 4 && xc == Field.GetLength(1) - 1)
-                    {
-                        Console.Write("\t    CURRENT PLAYER: ");
-                    }
-                    /*playerinfo print (2 from 4)*/
-                    if (yc == 5 && xc == Field.GetLength(1) - 1)
-                    {
-                        Console.Write("\t    name: " + playerName);
-                    }
-                    /*playerinfo print (3 from 4)*/
-                    if (yc == 6 && xc == Field.GetLength(1) - 1)
-                    {
-                        Console.Write("\t   lines: " + lines);
-                    }
-                    /*playerinfo print (4 from 4)*/
-                    if (yc == 7 && xc == Field.GetLength(1) - 1)
-                    {
-                        Console.Write("\t   score: " + score);
+                        if (yc == 1 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\tNEW HIGHSCORE!!!");
+                        }
+                        if (yc == 2 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t" + playerName + " WITH " + score +" POINTS");
+                        }
+                        if (yc == 4 && xc == Field.GetLength(1) - 1)
+                        {
+                            Console.Write("\t    WOW, YOU ARE AWESOME ;)");
+                        }
                     }
                 }
                 Console.WriteLine();
