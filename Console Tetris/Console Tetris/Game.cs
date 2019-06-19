@@ -15,7 +15,7 @@ namespace Console_tetris
         public static int boomNum;
         public int highScore = 999;
         public string highScorePlayer = "TestHighScorePlayer";
-        public string playerName = "TestPlayerName";
+        public string playerName;
         public int score;
         public int lines;
 
@@ -46,8 +46,6 @@ namespace Console_tetris
                     for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
                     {
                         Field[Fig.Y + figColumns, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
-                        UpdateField();
-                        Thread.Sleep(10);
                     }
                 }
             }
@@ -203,7 +201,7 @@ namespace Console_tetris
                     boomNum = 0;
                     UpdateField();
                 }
-                //moving rows
+                /*moving rows*/
                 for (int rowNum = 0; rowNum < rowsToDestroy.GetLength(0); rowNum++)
                 {
                     for (int row = 0; row < Field.GetLength(0); row++)

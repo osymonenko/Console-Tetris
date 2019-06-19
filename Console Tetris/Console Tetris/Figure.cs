@@ -100,7 +100,6 @@ namespace Console_tetris
             Geometry = new int[2, 4] {{ 8, 8, 0, 0 },
                                       { 0, 8, 8, 0 } };
 
-
             LengthRowsHorisontal = 2;
             LengthColumnsHorizontal = 3;
             LengthRowsVertical = 3;

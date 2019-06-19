@@ -57,14 +57,12 @@ namespace Console_tetris
                     switch (input.Key)
                     {
                         case ConsoleKey.A:
-                            Console.WriteLine("'A' KEY DETECTED");
                             lock (locker)
                             {
                                 Game.MoveFigLeft(Game.NoObstructionsCheck('A'));
                                 break;
                             }
                         case ConsoleKey.D:
-                            Console.WriteLine("'D' KEY DETECTED");
                             lock (locker)
                             {
                                 Game.MoveFigRight(Game.NoObstructionsCheck('D'));
@@ -77,7 +75,6 @@ namespace Console_tetris
                                 break;
                             }
                         default:
-                            Console.WriteLine("...NOTHING...");
                             break;
                     }
                 }
