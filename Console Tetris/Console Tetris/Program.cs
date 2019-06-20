@@ -35,17 +35,20 @@ namespace Console_tetris
             {
                 lock (locker)
                 {
-                    Thread.Sleep(250);
+                    Thread.Sleep(100);
                     Game.MoveFigDown(Game.NoObstructionsCheck('S'));
+                    if (Game.gameOver)
+                    {
+                        Console.WriteLine("\nEnter next player name and press any key to start again");
+                        Game.gameOver = false;
+                        Game.playerName = Console.ReadLine();
+                        Game.score = 0;
+                        Game.lines = 0;
+                        Game.DrawFig();
+                        Game.ClearField();
+                        SleepMoveDown();
+                    }
                 }
-            }
-            if (Game.gameOver)
-            {
-                Console.WriteLine("Press any key to start again");
-                Console.ReadKey();
-                Game.ClearField();
-                Game.UpdateField();
-                Game.gameOver = false;
             }
         }
 

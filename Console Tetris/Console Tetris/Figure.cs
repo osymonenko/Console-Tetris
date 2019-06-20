@@ -18,8 +18,6 @@ namespace Console_tetris
         public int LengthRowsVertical { get; set; }
         public int LengthColumnsHorizontal { get; set; }
         public int LengthColumnsVertical { get; set; }
-
-        public virtual void Rotate(int[,] Field) { }
     }
 
     class O : Figure

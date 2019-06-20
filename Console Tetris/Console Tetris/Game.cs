@@ -10,7 +10,7 @@ namespace Console_tetris
     class Game
     {
         public int[,] Field = new int[15, 12];
-        public Figure Fig = new O();
+        public Figure Fig = new I();
         //public Figure Fig;
         public static int boomNum;
         public int highScore = 99;
@@ -22,7 +22,7 @@ namespace Console_tetris
 
         public void SetFigStart()
         {
-            //Fig = Generate();
+            Fig = Generate();
             Fig.Y = 0;
             Fig.X = Field.GetLength(1) / 2 - 1;
         }
@@ -35,6 +35,10 @@ namespace Console_tetris
                 {
                     for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
                     {
+                        if (Fig.Geometry[figRows, figColumns] == 0)
+                        {
+                            continue;
+                        }
                         if (Field[Fig.Y + figRows, Fig.X + figColumns] == 1)
                         {
                             gameOver = true;
@@ -50,11 +54,33 @@ namespace Console_tetris
                 {
                     for (int figColumns = 0; figColumns < Fig.Geometry.GetLength(1); figColumns++)
                     {
+                        if (Fig.Geometry[figRows, figColumns] == 0)
+                        {
+                            continue;
+                        }
                         if (Field[Fig.Y + figColumns, Fig.X + 1 - figRows] == 1)
                         {
                             gameOver = true;
                         }
-                        Field[Fig.Y + figColumns, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
+                        /*only for I vertical dude*/
+                        if (Fig.LengthRowsVertical == 4 && figRows != 1)
+                        {
+                            if (Field[Fig.Y + figColumns, Fig.X] == 1)
+                            {
+                                gameOver = true;
+                            }
+                            Field[Fig.Y + figColumns, Fig.X] = Fig.Geometry[figRows, figColumns];
+                            continue;
+                        }
+                        /*only for I vertical dude*/
+                        if (Fig.LengthRowsVertical == 4 && figRows == 1)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Field[Fig.Y + figColumns, Fig.X + 1 - figRows] = Fig.Geometry[figRows, figColumns];
+                        }
                     }
                 }
             }
@@ -228,8 +254,6 @@ namespace Console_tetris
                         //destroying the rows
                         for (int column = 0; column < Field.GetLength(1); column++)
                         {
-                            //Console.WriteLine("MAKING CELL " + Field[rowsToDestroy[rowNum], column] + "= 0");
-                            //Thread.Sleep(100);
                             Field[rowsToDestroy[rowNum], column] = 0;
                         }
                         lines++;
