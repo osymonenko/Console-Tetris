@@ -25,23 +25,27 @@ namespace Console_tetris
             Game.DrawFig();
             Thread T1 = new Thread(SleepMoveDown);
             Thread T2 = new Thread(UpdateGameField);
-            T1.Name = "THREAD: Drop every 1 sec";
-            T2.Name = "THREAD: Readkey";
             T1.Start();
             T2.Start();
         }
 
         public static void SleepMoveDown()
         {
-            while (true)
+            while (!Game.gameOver)
             {
-                Thread.Sleep(80);
                 lock (locker)
                 {
+                    Thread.Sleep(250);
                     Game.MoveFigDown(Game.NoObstructionsCheck('S'));
-                    DateTime now = DateTime.Now;
-                    Console.WriteLine("\n{0:T}", now);
                 }
+            }
+            if (Game.gameOver)
+            {
+                Console.WriteLine("Press any key to start again");
+                Console.ReadKey();
+                Game.ClearField();
+                Game.UpdateField();
+                Game.gameOver = false;
             }
         }
 
@@ -49,7 +53,6 @@ namespace Console_tetris
         {
             while (true)
             {
-                Console.WriteLine("THREAD READKEY ENTERED");
                 var input = Console.ReadKey(true);
 
                 lock (locker)

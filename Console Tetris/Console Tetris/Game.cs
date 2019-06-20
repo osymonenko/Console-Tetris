@@ -61,11 +61,6 @@ namespace Console_tetris
             UpdateField();
         }
 
-        public void ShowScore()
-        {
-
-        }
-
         public void UpdateField()
         {
             Console.Clear();
@@ -143,6 +138,17 @@ namespace Console_tetris
                     }
                 }
                 Console.WriteLine();
+            }
+        }
+
+        public void ClearField()
+        {
+            for(int i = 0; i < Field.GetLength(0); i++)
+            {
+                for (int j = 0; j < Field.GetLength(1); j++)
+                {
+                    Field[i, j] = 0;
+                }
             }
         }
 
