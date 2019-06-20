@@ -22,7 +22,8 @@ namespace Console_tetris
 
         public void SetFigStart()
         {
-            Fig = Generate();
+            Fig.IsVertical = true;
+            //Fig = Generate();
             Fig.Y = 0;
             Fig.X = Field.GetLength(1) / 2 - 1;
         }

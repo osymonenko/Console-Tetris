@@ -13,7 +13,6 @@ namespace Console_tetris
     {
         static Game Game = new Game();
         static object locker = new object();
-        //for better view
 
         static void Main(string[] args)
         {
@@ -46,7 +45,6 @@ namespace Console_tetris
                         Game.lines = 0;
                         Game.DrawFig();
                         Game.ClearField();
-                        SleepMoveDown();
                     }
                 }
             }
@@ -54,7 +52,7 @@ namespace Console_tetris
 
         public static void UpdateGameField()
         {
-            while (true)
+            while (!Game.gameOver)
             {
                 var input = Console.ReadKey(true);
 
