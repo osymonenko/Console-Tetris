@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Console_tetris
 {
     class Game
     {
         public int[,] Field = new int[15, 12];
-        public Figure Fig = new I();
+        public Figure Fig = new O();
         //public Figure Fig;
         public static int boomNum;
         public int highScore = 99;
-        public string highScorePlayer = "TestHighScorePlayer";
+        public string highScorePlayer;
         public string playerName;
         public int score;
         public int lines;
@@ -156,16 +152,34 @@ namespace Console_tetris
                         }
                         if (yc == 2 && xc == Field.GetLength(1) - 1)
                         {
-                            Console.Write("\t" + playerName + " WITH " + score +" POINTS");
+                            Console.Write("\t" + playerName + " WITH " + score + " POINTS");
                         }
                         if (yc == 4 && xc == Field.GetLength(1) - 1)
                         {
                             Console.Write("\t    WOW, YOU ARE AWESOME ;)");
                         }
+                        writeHighScore(playerName, score);
                     }
                 }
                 Console.WriteLine();
             }
+        }
+
+        public void writeHighScore(String player1, int score1)
+        {
+            StreamWriter sw = new StreamWriter(@"\console tetris highscore.txt");
+            sw.WriteLine(player1 + " " + score1);
+            sw.Close();
+        }
+
+        public void readHighScore()
+        {
+            StreamReader sr = new StreamReader(@"\console tetris highscore.txt");
+            string s = sr.ReadLine();
+            string[] text = s.Split(' ');
+            highScorePlayer = text[0];
+            highScore = int.Parse(text[1]);
+            sr.Close();
         }
 
         public void ClearField()

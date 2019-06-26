@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Collections;
 using System.Threading;
 
 namespace Console_tetris
@@ -19,7 +14,16 @@ namespace Console_tetris
             /*Game preparation*/
             Console.WriteLine("Player, enter your name below");
             Game.playerName = Console.ReadLine();
-
+            string path = @"\console tetris highscore.txt";
+            if (!File.Exists(path))
+            {
+                StreamWriter sw = File.CreateText(path);
+                {
+                    sw.WriteLine("test 99");
+                    sw.Close();
+                }
+            }
+            Game.readHighScore();
             Game.SetFigStart();
             Game.DrawFig();
             Thread T1 = new Thread(SleepMoveDown);
@@ -39,6 +43,7 @@ namespace Console_tetris
                     if (Game.gameOver)
                     {
                         Console.WriteLine("\nEnter next player name and press any key to start again");
+                        Game.readHighScore();
                         Game.gameOver = false;
                         Game.playerName = Console.ReadLine();
                         Game.score = 0;
