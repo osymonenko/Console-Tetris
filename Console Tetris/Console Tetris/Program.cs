@@ -14,7 +14,7 @@ namespace Console_tetris
             /*Game preparation*/
             Console.WriteLine("Player, enter your name below");
             Game.playerName = Console.ReadLine();
-            string path = @"\console tetris highscore.txt";
+            string path = Path.GetTempPath() + "console tetris highscore.txt";
             if (!File.Exists(path))
             {
                 StreamWriter sw = File.CreateText(path);

@@ -6,8 +6,7 @@ namespace Console_tetris
     class Game
     {
         public int[,] Field = new int[15, 12];
-        public Figure Fig = new O();
-        //public Figure Fig;
+        public Figure Fig;
         public static int boomNum;
         public int highScore = 99;
         public string highScorePlayer;
@@ -15,11 +14,11 @@ namespace Console_tetris
         public int score;
         public int lines;
         public bool gameOver;
+        public string path = Path.GetTempPath() + "console tetris highscore.txt";
 
         public void SetFigStart()
         {
-            Fig.IsVertical = true;
-            //Fig = Generate();
+            Fig = Generate();
             Fig.Y = 0;
             Fig.X = Field.GetLength(1) / 2 - 1;
         }
@@ -167,14 +166,14 @@ namespace Console_tetris
 
         public void writeHighScore(String player1, int score1)
         {
-            StreamWriter sw = new StreamWriter(@"\console tetris highscore.txt");
+            StreamWriter sw = new StreamWriter(path);
             sw.WriteLine(player1 + " " + score1);
             sw.Close();
         }
 
         public void readHighScore()
         {
-            StreamReader sr = new StreamReader(@"\console tetris highscore.txt");
+            StreamReader sr = new StreamReader(path);
             string s = sr.ReadLine();
             string[] text = s.Split(' ');
             highScorePlayer = text[0];
@@ -515,7 +514,8 @@ namespace Console_tetris
                     fig.IsVertical = true;
                     break;
                 default:
-                    return Generate();
+                    fig = new I();
+                    break;
             }
            return fig;
         }
